@@ -49,12 +49,12 @@ class JackalEnv(robot_gazebo_env.RobotGazeboEnv):
         # here the Husarion and Turtlebot templates differ
         # the Husarion includes this code:
         
-        ros_ws_abspath = rospy.get_param("/jackal/ros_ws_abspath", None)
+        """ros_ws_abspath = rospy.get_param("/jackal/ros_ws_abspath", None)
         assert ros_ws_abspath is not None, "You forgot to set ros_ws_abspath in your yaml file of your main RL script. Set ros_ws_abspath: \'YOUR/SIM_WS/PATH\'"
 
         ROSLauncher(rospackage_name="jackal_gazebo",
                     launch_file_name="spawn_jackal.launch",
-                    ros_ws_abspath=ros_ws_abspath)
+                    ros_ws_abspath=ros_ws_abspath)"""
         rospy.logerr(">>>>>>>>> ROSLAUNCHER DONE JackalEnv INIT...")
         
 

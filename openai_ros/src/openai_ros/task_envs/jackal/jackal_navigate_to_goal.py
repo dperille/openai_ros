@@ -60,10 +60,11 @@ class JackalMazeEnv(jackal_robot_env.JackalEnv):
         self.max_angular_vel = 0.5
 
         # Action space is (linear velocity, angular velocity) pair
-        self.action_space = spaces.Box(np.array([self.min_linear_vel, self.min_angular_vel]),
+        """self.action_space = spaces.Box(np.array([self.min_linear_vel, self.min_angular_vel]),
                                        np.array([self.max_linear_vel, self.max_angular_vel]),
-                                       dtype=np.float32)
-        
+                                       dtype=np.float32)"""
+        self.n_actions = 10
+        self.action_space = spaces.Tuple((spaces.Discrete(self.n_actions), spaces.Discrete(self.n_actions)))
         
         ### OBSERVATIONS ###
         self.goal_precision = 0.10
@@ -134,8 +135,8 @@ class JackalMazeEnv(jackal_robot_env.JackalEnv):
     def _set_init_pose(self):
         """Sets the Robot in its init pose
         """
-        self.move_base( self.init_linear_forward_speed,
-                        self.init_linear_turn_speed,
+        self.move_base( self.init_linear_speed,
+                        self.init_angular_speed,
                         epsilon=0.05,
                         update_rate=10,
                         min_laser_distance=-1)
@@ -165,8 +166,8 @@ class JackalMazeEnv(jackal_robot_env.JackalEnv):
         """
         
         # Action is (linear velocity, angular velocity) pair
-        linear_velocity = action[0]
-        angular_velocity = action[1]
+        linear_velocity = action / self.n_actions * self.max_linear_vel + self.min_linear_vel
+        angular_velocity = action % self.n_actions * self.max_angular_vel + self.min_angular_vel
         rospy.logdebug("Set Action ==> " + str(linear_velocity) + ", " + str(angular_velocity))
 
         # Check if larger than max velocity
@@ -195,7 +196,7 @@ class JackalMazeEnv(jackal_robot_env.JackalEnv):
         desired_position = [self.goal_x, self.goal_y, self.goal_yaw] # TODO - round?
 
         # Concatenate observations
-        observations = laser_scan + odometry_array + desired_position
+        observations = list(laser_scan) + odometry_array + desired_position
 
         rospy.logdebug("END Get Observation ==>")
 

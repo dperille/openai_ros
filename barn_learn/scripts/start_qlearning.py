@@ -35,17 +35,18 @@ if __name__ == '__main__':
     # Loads parameters from the ROS param server
     # Parameters are stored in a yaml file inside the config directory
     # They are loaded at runtime by the launch file
-    Alpha = rospy.get_param("/husarion/alpha")
-    Epsilon = rospy.get_param("/husarion/epsilon")
-    Gamma = rospy.get_param("/husarion/gamma")
-    epsilon_discount = rospy.get_param("/husarion/epsilon_discount")
-    nepisodes = rospy.get_param("/husarion/nepisodes")
-    nsteps = rospy.get_param("/husarion/nsteps")
+    Alpha = rospy.get_param("/jackal/alpha")
+    Epsilon = rospy.get_param("/jackal/epsilon")
+    Gamma = rospy.get_param("/jackal/gamma")
+    epsilon_discount = rospy.get_param("/jackal/epsilon_discount")
+    nepisodes = rospy.get_param("/jackal/nepisodes")
+    nsteps = rospy.get_param("/jackal/nsteps")
 
-    running_step = rospy.get_param("/husarion/running_step")
+    running_step = rospy.get_param("/jackal/running_step")
 
     # Initialises the algorithm that we are going to use for learning
-    qlearn = qlearn.QLearn(actions=range(env.action_space.n),
+    # TODO - change back to param value
+    qlearn = qlearn.QLearn(actions=range(100),
                            alpha=Alpha, gamma=Gamma, epsilon=Epsilon)
     initial_epsilon = qlearn.epsilon
 
