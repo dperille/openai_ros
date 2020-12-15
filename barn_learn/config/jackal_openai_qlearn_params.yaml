@@ -1,0 +1,3 @@
+jackal:
+  task_and_robot_environment_name: 'JackalMaze-v0'
+  ros_ws_abspath: '/home/danny/jackal_ws'
