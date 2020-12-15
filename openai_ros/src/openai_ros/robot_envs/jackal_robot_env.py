@@ -2,6 +2,7 @@ import numpy
 import rospy
 import time
 from openai_ros import robot_gazebo_env
+from openai_ros.openai_ros_common import ROSLauncher
 from std_msgs.msg import Float64
 from sensor_msgs.msg import JointState
 from sensor_msgs.msg import Image
@@ -48,6 +49,9 @@ class JackalEnv(robot_gazebo_env.RobotGazeboEnv):
         # here the Husarion and Turtlebot templates differ
         # the Husarion includes this code:
         
+        ros_ws_abspath = rospy.get_param("/jackal/ros_ws_abspath", None)
+        assert ros_ws_abspath is not None, "You forgot to set ros_ws_abspath in your yaml file of your main RL script. Set ros_ws_abspath: \'YOUR/SIM_WS/PATH\'"
+
         ROSLauncher(rospackage_name="jackal_gazebo",
                     launch_file_name="spawn_jackal.launch",
                     ros_ws_abspath=ros_ws_abspath)

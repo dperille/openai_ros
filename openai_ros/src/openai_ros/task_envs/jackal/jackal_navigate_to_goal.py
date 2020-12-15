@@ -2,8 +2,11 @@ import rospy
 import numpy as np
 import time
 import math
+import os
 from gym import spaces
 from openai_ros.robot_envs import jackal_robot_env
+#from openai_ros.task_envs.task_commons import LoadYamlFileParamsTest
+from openai_ros.openai_ros_common import ROSLauncher
 from gym.envs.registration import register
 from tf.transformations import euler_from_quaternion
 from sensor_msgs.msg import LaserScan
@@ -35,9 +38,9 @@ class JackalMazeEnv(jackal_robot_env.JackalEnv):
                     ros_ws_abspath=ros_ws_abspath)
 
         # Load Params from the desired Yaml file
-        LoadYamlFileParamsTest(rospackage_name="openai_ros",
-                               rel_path_from_package_to_file="src/openai_ros/task_envs/jackal/config",
-                               yaml_file_name="jackal_barn.yaml")
+        #LoadYamlFileParamsTest(rospackage_name="openai_ros",
+                               #rel_path_from_package_to_file="src/openai_ros/task_envs/jackal/config",
+                               #yaml_file_name="jackal_barn.yaml")
 
         # Here we will add any init functions prior to starting the MyRobotEnv
         super(JackalMazeEnv, self).__init__()
@@ -46,11 +49,15 @@ class JackalMazeEnv(jackal_robot_env.JackalEnv):
         # TODO - max acceleration params
         # TODO: see if the params need to be transferred over to 
         # jackal_maze.yaml
+
+        #TODO - actually get params from yaml
         self.min_linear_vel = 0
-        self.max_linear_vel = rospy.get_param('/jackal_velocity_controller/linear/x/max_velocity')
+        #self.max_linear_vel = rospy.get_param('/jackal_velocity_controller/linear/x/max_velocity')
+        self.max_linear_vel = 0.5
 
         self.min_angular_vel = 0
-        self.max_angular_vel = rospy.get_param('/jackal_velocity_controller/angular/z/max_velocity')
+        #self.max_angular_vel = rospy.get_param('/jackal_velocity_controller/angular/z/max_velocity')
+        self.max_angular_vel = 0.5
 
         # Action space is (linear velocity, angular velocity) pair
         self.action_space = spaces.Box(np.array([self.min_linear_vel, self.min_angular_vel]),
@@ -224,7 +231,7 @@ class JackalMazeEnv(jackal_robot_env.JackalEnv):
 
         if done:
             # If done and reached goal (success), big positive reward
-            if self._reached_goal(current_position, goal_position, self.goal_precision)
+            if self._reached_goal(current_position, goal_position, self.goal_precision):
                 reward = self.goal_reward
 
             # If done because of failure, negative reward
