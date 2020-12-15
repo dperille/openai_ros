@@ -206,8 +206,7 @@ class JackalMazeEnv(jackal_robot_env.JackalEnv):
         # get current [x, y, yaw]
         current_position = [observations[-6], observations[-5], observations[-4]]
 
-        is_done = self._is_outside_boundaries(current_position) or _has_crashed(current_position)
-               or _reached_goal(current_position, self.goal_precision)
+        is_done = self._is_outside_boundaries(current_position) or self._has_crashed(current_position) or self._reached_goal(current_position, self.goal_precision)
 
         rospy.logdebug("_IS_DONE? ==> " + str(is_done))
 
@@ -225,7 +224,7 @@ class JackalMazeEnv(jackal_robot_env.JackalEnv):
 
         if done:
             # If done and reached goal (success), big positive reward
-            if _reached_goal(current_position, goal_position, self.goal_precision)
+            if self._reached_goal(current_position, goal_position, self.goal_precision)
                 reward = self.goal_reward
 
             # If done because of failure, negative reward

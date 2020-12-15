@@ -209,12 +209,12 @@ def RegisterOpenAI_Ros_Env(task_env, max_episode_steps=10000):
 
         register(
             id=task_env,
-            entry_point='openai_ros.task_envs.jackal.jackal_maze.JackalMazeEnv',
+            entry_point='openai_ros.task_envs.jackal.jackal_navigate_to_goal.JackalMazeEnv',
             max_episode_steps=max_episode_steps,
         )
 
         # import our training environment
-        from openai_ros.task_envs.jackal import jackal_maze
+        from openai_ros.task_envs.jackal import jackal_navigate_to_goal
 
     else:
         result = False
