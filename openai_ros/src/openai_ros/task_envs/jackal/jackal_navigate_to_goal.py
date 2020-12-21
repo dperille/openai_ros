@@ -23,6 +23,8 @@ class JackalMazeEnv(jackal_robot_env.JackalEnv):
         It will learn how to move around the maze without crashing.
         """
 
+        rospy.logdebug("STARTING INIT")
+
         # This is the path where the simulation files, the Task and the Robot gits will be downloaded if not there
         # This parameter HAS to be set up in the MAIN launch of the AI RL script
         ros_ws_abspath = rospy.get_param("/jackal/ros_ws_abspath", None)
@@ -127,7 +129,7 @@ class JackalMazeEnv(jackal_robot_env.JackalEnv):
         self.cumulated_steps = 0.0
         self.cumulated_reward = 0.0
         
-        
+        rospy.logdebug("FINISHED INIT\n\n")        
 
         # rospy.logdebug("")
         # self.laser_filtered_pub = rospy.Publisher('/turtlebot2/laser/scan_filtered', LaserScan, queue_size=1)
@@ -213,8 +215,10 @@ class JackalMazeEnv(jackal_robot_env.JackalEnv):
 
         # get current [x, y, yaw]
         current_position = [observations[-6], observations[-5], observations[-4]]
+        goal_position = [observations[-3], observations[-2], observations[-1]]
+        laser_readings = observations[:-7]
 
-        is_done = self._is_outside_boundaries(current_position) or self._has_crashed(current_position) or self._reached_goal(current_position, self.goal_precision)
+        is_done = self._is_outside_boundaries(current_position) or self._has_crashed(laser_readings) or self._reached_goal(current_position, goal_position, self.goal_precision)
 
         rospy.logdebug("_IS_DONE? ==> " + str(is_done))
 
@@ -281,7 +285,8 @@ class JackalMazeEnv(jackal_robot_env.JackalEnv):
 
         for dist in laser_readings:
             if dist <= self.min_laser_value:
-                rospy.logdebug("JACKAL CRASHED")
+                rospy.logdebug("JACKAL CRASHED -- " + str(dist))
+                rospy.logdebug(laser_readings)
                 return True
 
         return False
