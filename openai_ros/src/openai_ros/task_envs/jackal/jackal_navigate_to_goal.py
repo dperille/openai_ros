@@ -35,8 +35,8 @@ class JackalMazeEnv(jackal_robot_env.JackalEnv):
 
         # TODO: modify this
         # TODO: create jackal_barn.launch and specify a BARN world
-        ROSLauncher(rospackage_name="jackal_gazebo",
-                    launch_file_name="myworld_launch.launch",
+        ROSLauncher(rospackage_name="barn_learn",
+                    launch_file_name="gazebo_launch.launch",
                     ros_ws_abspath=ros_ws_abspath)
 
         # Load Params from the desired Yaml file
@@ -160,6 +160,7 @@ class JackalMazeEnv(jackal_robot_env.JackalEnv):
         # We wait a small ammount of time to start everything because in very fast resets, laser scan values are sluggish
         # and sometimes still have values from the prior position that triguered the done.
         time.sleep(1.0)
+        self.move_base(0.1, 0.1, 0.01)
 
     def _set_action(self, action):
         """
@@ -174,7 +175,7 @@ class JackalMazeEnv(jackal_robot_env.JackalEnv):
 
         # Check if larger than max velocity
         # TODO - check if acceleration is greater than allowed
-        self.move_base(linear_velocity, angular_velocity, epsilon=self.move_base_precision, update_rate=10)
+        #self.move_base(linear_velocity, angular_velocity, epsilon=self.move_base_precision, update_rate=10)
 
     def _get_obs(self):
         """
