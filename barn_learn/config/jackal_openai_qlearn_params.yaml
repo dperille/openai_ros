@@ -1,6 +1,6 @@
 jackal:
   task_and_robot_environment_name: 'JackalMaze-v0'
-  ros_ws_abspath: '/home/danny/jackal_ws'
+  ros_ws_abspath: '/home/users/dperille/jackal_ws'
   
   alpha: 0.1
   gamma: 0.7
